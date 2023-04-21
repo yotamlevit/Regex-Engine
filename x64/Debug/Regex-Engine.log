@@ -1,0 +1,9 @@
+﻿  Nfa.c
+C:\Users\yotam\source\repos\Regex-Engine\Nfa.c(19,26): warning C4028: formal parameter 1 different from declaration
+C:\Users\yotam\source\repos\Regex-Engine\Nfa.c(41,26): warning C4028: formal parameter 1 different from declaration
+C:\Users\yotam\source\repos\Regex-Engine\Nfa.c(67,19): warning C4047: 'return': 'NfaNodePtr' differs in levels of indirection from 'NfaNode_Type *[26]'
+C:\Users\yotam\source\repos\Regex-Engine\Nfa.c(72,3): warning C4033: 'nfaNext' must return a value
+C:\Users\yotam\source\repos\Regex-Engine\Nfa.c(79,26): warning C4047: 'function': 'NfaNodePtr *' differs in levels of indirection from 'NfaNode_Type *(*)[26]'
+C:\Users\yotam\source\repos\Regex-Engine\Nfa.c(79,13): warning C4024: 'nfaDelete': different types for formal and actual parameter 1
+C:\Users\yotam\source\repos\Regex-Engine\Nfa.c(74): warning C4715: 'nfaNext': not all control paths return a value
+  Regex-Engine.vcxproj -> C:\Users\yotam\source\repos\Regex-Engine\x64\Debug\Regex-Engine.exe
