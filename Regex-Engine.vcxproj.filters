@@ -23,7 +23,7 @@
     <ClCompile Include="Nfa.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RegexEngine.c">
+    <ClCompile Include="Test_regex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

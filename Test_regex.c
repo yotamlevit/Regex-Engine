@@ -3,8 +3,8 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_STATES 100
-#define NUM_ALPHABET 5 //#define NUM_ALPHABET 256
+#define MAX_STATES 12
+#define NUM_ALPHABET 3 //#define NUM_ALPHABET 26
 
 struct NFA {
     int states[MAX_STATES];
@@ -14,6 +14,7 @@ struct NFA {
     int start_state;
     int final_states[MAX_STATES];
     int num_final_states;
+    int*** pTransitions;
     int transitions[MAX_STATES][NUM_ALPHABET + 1][MAX_STATES];
 };
 
@@ -27,7 +28,17 @@ void init_nfa(struct NFA *nfa) {
     {
         nfa->alphabet[i] = (char)i+'a';
     }
+
+    for (i = 0; i < MAX_STATES; i++)
+    {
+        nfa->final_states[i] = 0;
+    }
     
+    //memset(nfa->final_states, 0, MAX_STATES)
+    //nfa->final_states[MAX_STATES] = { 0 };
+
+    //nfa->pTransitions = new 
+
     memset(nfa->transitions, 0, sizeof(nfa->transitions));
 }
 
@@ -48,7 +59,7 @@ void add_range_transition(struct NFA *nfa, int current_state, char start_char, c
 }
 
 void add_star_transition(struct NFA *nfa, int origin_state, int last_start_state) {
-    add_epsilon_transition(nfa, last_start_state, origin_state);
+    add_epsilon_transition(nfa, origin_state, last_start_state);
 }
 
 void add_or_transition(struct NFA *nfa, int current_state, int next_state1, int next_state2) {
@@ -62,6 +73,7 @@ void add_or_transition(struct NFA *nfa, int current_state, int next_state1, int 
 void add_concat_transition(struct NFA *nfa, int current_state, int next_state) {
     add_epsilon_transition(nfa, current_state, next_state);
 }
+
 
 
 int match(struct NFA *nfa, char *input) {
@@ -155,6 +167,40 @@ void epsilon_closure(struct NFA *nfa, int state, int *closure_states, int *num_c
 }
 
 
+int myMatch(struct NFA* nfa, char* input, int currentState) {
+    printf("Current state: %d \n", currentState);
+
+    int input_index = *input - 'a';
+
+    for (int i = 0; i < MAX_STATES; i++)
+    {
+        //Epsilon transition
+        if (nfa->transitions[currentState][nfa->num_alphabets][i] == 1)
+        {
+            return myMatch(nfa, input, i);
+        }
+    }
+
+
+    if (nfa->final_states[currentState] && *input == '\0')
+        return 1;
+
+    if (*input == '\0')
+        return 0;
+
+    for (int i = 0; i < MAX_STATES; i++)
+    {
+
+        //Character transition
+        if (nfa->transitions[currentState][input_index][i] == 1)
+        {
+            return myMatch(nfa, input + 1, currentState + 1);
+        }
+    }
+
+    return 0;
+}
+
 
 int match_regex(struct NFA *nfa, char *input) {
     int current_states[MAX_STATES];
@@ -229,7 +275,7 @@ void regex_to_nfa(struct NFA *nfa, char *regex) {
             // add a star transition
             //int next_state = nfa->num_states++;
             add_star_transition(nfa, current_state, current_state);
-            current_state;// = next_state;
+            //current_state;// = next_state;
         } else {
             // add a character transition
             int next_state = nfa->num_states++;
@@ -240,6 +286,45 @@ void regex_to_nfa(struct NFA *nfa, char *regex) {
     }
     // add the final state
     nfa->final_states[nfa->num_final_states++] = current_state;
+}
+
+void my_regex_to_nfa(struct NFA* nfa, char* regex) {
+    // add the alphabet to the NFA
+    int i = 0;
+
+    printf("Regex is: %s\n", regex);
+    int current_state = nfa->start_state;
+
+    char* c = regex;
+    while (*c != '\0') {
+        //printf("Char is: %c\n", c);
+        if (*c == '|') {
+            // add an or transition
+            int next_state1 = nfa->num_states++;
+            int next_state2 = nfa->num_states++;
+            add_or_transition(nfa, current_state, next_state1, next_state2);
+            current_state = nfa->num_states++;
+        }
+        else if (*c == '*') {
+            // add a star transition
+            //int next_state = nfa->num_states - 1;
+            current_state = nfa->num_states++;
+            add_transition(nfa, current_state, *c++, current_state);
+            nfa->final_states[current_state] = 1;
+            c++;
+            //add_star_transition(nfa, current_state, next_state);
+            //current_state = next_state;
+        }
+        else {
+            // add a character transition
+            int next_state = ++nfa->num_states;
+            add_transition(nfa, current_state, *c++, next_state);
+            current_state = next_state;
+        }
+
+    }
+    // add the final state
+    nfa->final_states[current_state] = 1;
 }
 
 void print_nfa(struct NFA *nfa) {
@@ -282,29 +367,42 @@ int main() {
     //nfa.num_final_states = 1;
 //
     //add_transition(&nfa, 0, 'a', 1);
-    char * regex = "a*b*c*d*e*f*g*h*i*j*k*";
+    // 
+    //char * regex = "a*b*c*d*e*f*g*h*i*j*k*";
+    char* regex = "a*b*";
     struct NFA* nfa;
     nfa = NULL;
     nfa = (struct NFA *)malloc(sizeof(struct NFA));
+    printf("NFA alocated in the memory.\n");
     init_nfa(nfa);
+    printf("NFA INITIALIZED .\n");
     //nfa->start_state=0;
     //nfa->num_states=0;
+    //regex_to_nfa(nfa, regex);
+
     regex_to_nfa(nfa, regex);
+    printf("NFA was built.\n");
     
 
-    printf("\nasdasd\n");
-    print_nfa(nfa);
+    //printf("\nasdasd\n");
+    //print_nfa(nfa);
 
-    printf("\nMatch\n");
+    //printf("\nMatch\n");
+    //clock_t start_clk = clock();
+    //printf("the answer is: %d\n", match(nfa, "abcd"));//aaabbbcccdddeeefffggghhhiiijk
+    //printf("Processor time used by program: %lg sec.\n", \
+    //(clock() - start_clk) / (long double) CLOCKS_PER_SEC);
     clock_t start_clk = clock();
-    printf("the answer is: %d\n", match(nfa, "aaabbbcccdddeeefffggghhhiiijk"));
-    printf("Processor time used by program: %lg sec.\n", \
-    (clock() - start_clk) / (long double) CLOCKS_PER_SEC);
 
     start_clk = clock();
-    printf("the answer is: %d\n", match_regex(nfa, "aaabbbcccdddeeefffggghhhiiijk"));
+    printf("the answer is: %d\n", match_regex(nfa, "ab", 0));
     printf("Processor time used by program: %lg sec.\n", \
-    (clock() - start_clk) / (long double) CLOCKS_PER_SEC);
+    (clock() - start_clk) / (long double)CLOCKS_PER_SEC);
+
+    //start_clk = clock();
+    //printf("the answer is: %d\n", match_regex(nfa, "aaabbbcccdddeeefffggghhhiiijk"));
+    //printf("Processor time used by program: %lg sec.\n", \
+    //(clock() - start_clk) / (long double) CLOCKS_PER_SEC);
     free(nfa);
     return 0;
 }
