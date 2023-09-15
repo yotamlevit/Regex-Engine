@@ -53,6 +53,7 @@ Mkfile.old
 dkms.conf
 
 
-# VS code
+# IDE
+.idea
 .vscode
 .vs
