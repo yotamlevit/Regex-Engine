@@ -1,4 +1,0 @@
-﻿  Test_regex.c
-C:\Users\yotam\source\repos\Regex-Engine\Test_regex.c(97,26): warning C4013: 'contains' undefined; assuming extern returning int
-C:\Users\yotam\source\repos\Regex-Engine\Test_regex.c(398,58): warning C4020: 'match_regex': too many actual parameters
-  Regex-Engine.vcxproj -> C:\Users\yotam\source\repos\Regex-Engine\x64\Debug\Regex-Engine.exe
