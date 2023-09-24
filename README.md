@@ -6,9 +6,9 @@ A C lang regex engine using NFA
 
 ## Regex Engine Steps:
 
-- Parse
-- Construction
-- Match
+1. [Parse](#parse)
+2. [Construction](#construction)
+3. [Match](#match)
 
 --------
 
@@ -26,6 +26,16 @@ This algorithm is an operator-precedence parser that is specifically designed to
 
 ### Construction
 Using Thomapson`s construction Algorithm we convert the postfix expression into a NFA structure
+
+###### What is Thomapson`s construction Algorithm?
+
+Thompson's Construction is a method in which we transform a regular expression
+into a (NFA) non-deterministic finite automaton.
+This can further be used to match strings against the expression.
+
+###### Code:
+* construction: /src/construction.c
+* NFA structure: /src/data_structures/nfa.c
 
 ----------
 
