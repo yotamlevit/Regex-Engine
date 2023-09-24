@@ -18,6 +18,11 @@ struct NFA {
     int transitions[MAX_STATES][NUM_ALPHABET + 1][MAX_STATES];
 };
 
+struct REGEX_RESPONSE {
+    int match;
+    char* match_pointer;
+};
+
 void init_nfa(struct NFA *nfa) {
     int i;
     nfa->num_states = 0;
@@ -74,7 +79,15 @@ void add_concat_transition(struct NFA *nfa, int current_state, int next_state) {
     add_epsilon_transition(nfa, current_state, next_state);
 }
 
-
+// Helper function to check if an array contains a value
+int contains(int arr[], int size, int value) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == value) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 int match(struct NFA *nfa, char *input) {
     int current_states[MAX_STATES];
@@ -132,16 +145,6 @@ int match(struct NFA *nfa, char *input) {
     return 0;
 }
 
-// Helper function to check if an array contains a value
-int contains(int arr[], int size, int value) {
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == value) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
 
 int in_array(int value, int arr[], int size) {
     for (int i = 0; i < size; i++) {
@@ -172,21 +175,21 @@ int myMatch(struct NFA* nfa, char* input, int currentState) {
 
     int input_index = *input - 'a';
 
-    for (int i = 0; i < MAX_STATES; i++)
-    {
-        //Epsilon transition
-        if (nfa->transitions[currentState][nfa->num_alphabets][i] == 1)
-        {
-            return myMatch(nfa, input, i);
-        }
-    }
-
-
     if (nfa->final_states[currentState] && *input == '\0')
         return 1;
 
     if (*input == '\0')
         return 0;
+
+    for (int i = 0; i < MAX_STATES; i++)
+    {
+        //Epsilon transition
+        if (nfa->transitions[currentState][nfa->num_alphabets][i] == 1)
+        {
+            printf("\nEpsilon\n");
+            return myMatch(nfa, input+1, i);
+        }
+    }
 
     for (int i = 0; i < MAX_STATES; i++)
     {
@@ -387,15 +390,15 @@ int main() {
     //printf("\nasdasd\n");
     //print_nfa(nfa);
 
-    //printf("\nMatch\n");
-    //clock_t start_clk = clock();
-    //printf("the answer is: %d\n", match(nfa, "abcd"));//aaabbbcccdddeeefffggghhhiiijk
-    //printf("Processor time used by program: %lg sec.\n", \
-    //(clock() - start_clk) / (long double) CLOCKS_PER_SEC);
+    printf("\nMatch\n");
     clock_t start_clk = clock();
+    printf("the answer is: %d\n", match(nfa, "cdb"));//aaabbbcccdddeeefffggghhhiiijk
+    printf("Processor time used by program: %lg sec.\n", \
+    (clock() - start_clk) / (long double) CLOCKS_PER_SEC);
+    //clock_t start_clk = clock();
 
     start_clk = clock();
-    printf("the answer is: %d\n", match_regex(nfa, "ab", 0));
+    printf("the answer is: %d\n", myMatch(nfa, "cdb", 0));
     printf("Processor time used by program: %lg sec.\n", \
     (clock() - start_clk) / (long double)CLOCKS_PER_SEC);
 

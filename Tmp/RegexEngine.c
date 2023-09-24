@@ -1,4 +1,4 @@
-#include "Nfa.h"
+#include "Nfa1111.h"
 
 
 #define IS_STR_END(ch) ch[1] == '\0' ? TRUE : FALSE

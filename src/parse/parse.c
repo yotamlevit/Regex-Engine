@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "data_structures/stack_char.h"
+#include "src/data_structures/stack/stack_char.h"
 
 #define END_OF_STR '\0'
 
