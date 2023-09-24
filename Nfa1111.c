@@ -1,4 +1,4 @@
-#include "Nfa.h"
+#include "Nfa1111.h"
 
 
 #define IS_MAX_EGDES(nfa) (*nfa)->egde_count < MAX_SYMBOLS-1 // TODO change name
