@@ -8,27 +8,10 @@
 #include <string.h>
 #include <ctype.h>
 #include "Include/stack_char.h"
-//#include "src/data_structures/stack/stack_char.h"
 
 #define END_OF_STR '\0'
 #define NOT_AN_OPERATOR -1
 
-// Function to return precedence of operators
-int precedence1(char operator)
-{
-    switch (operator) {
-        case '+':
-        case '-':
-            return 1;
-        case '*':
-        case '/':
-            return 2;
-        case '^':
-            return 3;
-        default:
-            return -1;
-    }
-}
 
 // Function to return precedence of operators
 int precedence(char operator)
