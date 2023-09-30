@@ -1,5 +1,5 @@
 # Regex-Engine
-A C lang regex engine using NFA
+A C lang regex engine using NFA based on Ken Thompson`s paper
 
 
 
@@ -14,7 +14,14 @@ A C lang regex engine using NFA
 
 
 ### Parse
-Using the Shunting-Yard Algorithm. we convert the regex expression from infix to postfix
+In thompson`s paper the compiler builds an NFA from a regular expression in postfix notation with dot (.) added as an explicit concatenation operator.
+
+Therefor the parser steps are:
+1. Adding an explicit concatenation operator - the '.' character will be used as in thompson\`s paper. The implementation is in the `insertExplicitConcatOperator` function.
+
+
+2. Converting the expression from infix notation to postfix notation. The implementation is in the `infixToPostfix` function.
+The convertion itself is sing the Shunting-Yard Algorithm.
 
 ###### What is the Shunting-Yard Algorithm?
 This algorithm is an operator-precedence parser that is specifically designed to parse mathematical expressions into postfix notation for computation. Postfix notation (Reverse Polish notation) is a mathematical notation in which the operators follow the numbers.
