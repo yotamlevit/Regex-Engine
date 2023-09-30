@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "nfa.h"
+#include "Include/nfa.h"
 
 // Function implementation
 NfaPtr initNFA()
