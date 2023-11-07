@@ -16,25 +16,25 @@ NfaPtr initNFA()
     NfaPtr newState = (NfaPtr)malloc(sizeof(NFA));
 
     // Set the artibutes of the node
-    newState->c = NULL;
+    newState->c = -1;
     newState->out = NULL;
     newState->out1 = NULL;
-    newState->lastlist = NULL;
+    newState->lastlist = -1;
 
     // Return the new node
     return newState;
 }
 
-NfaPtr initNFAData(char c)
+NfaPtr initNFAData(char c, NfaPtr out, NfaPtr out1, int lastlist)
 {
     // Take memory for the new node
     NfaPtr newState = (NfaPtr)malloc(sizeof(NFA));
 
     // Set the artibutes of the node
     newState->c = c;
-    newState->out = NULL;
-    newState->out1 = NULL;
-    newState->lastlist = NULL;
+    newState->out = out;
+    newState->out1 = out1;
+    newState->lastlist = lastlist;
 
     // Return the new node
     return newState;
@@ -47,9 +47,9 @@ void setNext(NfaPtr pNfa, char c)
     else
     {
         if(pNfa->out == NULL)
-            pNfa->out = initNFAData(c);
+            pNfa->out = initNFAData(c, NULL, NULL,0);
         else if(pNfa->out1 == NULL)
-            pNfa->out1 = initNFAData(c);
+            pNfa->out1 = initNFAData(c, NULL, NULL,0);
         else
             printf("\nThere are already 2 states connnected to this state\n");
 
@@ -58,6 +58,6 @@ void setNext(NfaPtr pNfa, char c)
 
 BOOLEAN isEndState(NfaPtr pNFA)
 {
-    return pNFA->c == 3;
+    return pNFA->c == 257;
 }
 
