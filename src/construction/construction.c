@@ -33,6 +33,13 @@ Frag* initFrag(NfaPtr start, NfaPtr** out){
     return newFrag;
 }
 
+
+//List1 creates a new pointer list containing the single pointer outp.
+// Append concatenates two pointer lists, returning the result.
+//
+// Patch connects the dangling arrows in the pointer list l to the state s: it sets *outp = s for each pointer outp in l.
+
+
 NfaPtr* *list1(NfaPtr* outp)
 {
     NfaPtr* * NfaListPtr = (NfaPtr**)malloc(sizeof(NfaPtr*));
@@ -49,11 +56,6 @@ NfaPtr* *append(NfaPtr* *l1, NfaPtr* *l2)
 void patch(NfaPtr* *l, NFA *s){
 
 }
-
-//List1 creates a new pointer list containing the single pointer outp.
-// Append concatenates two pointer lists, returning the result.
-//
-// Patch connects the dangling arrows in the pointer list l to the state s: it sets *outp = s for each pointer outp in l.
 
 void push(FragPtr stackp, FragPtr s)
 {
