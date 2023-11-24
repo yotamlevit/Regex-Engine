@@ -44,6 +44,27 @@ Thompson's Construction is a method in which we transform a regular expression
 into a (NFA) non-deterministic finite automaton.
 This can further be used to match strings against the expression.
 
+###### NFA representation:
+In /src/data_structures/nfa.c there is a structure that represent the NFA
+```angular2html
+typedef struct State
+{
+    char c; // Represents the char c<256 | c=256 in ascii represents a split | c=256 represents a match
+    struct State *out, *out1; // Pointer to one of the next states | Pointer to the second of the next states
+    int lastlist; // Lastlist is used during execution and is explained in the next section.
+}NFA,* NfaPtr;
+```
+
+State can represent three types of NFA fragments, depending on c values:
+
+![State Types Photo](relative%20path/../Images/StateStatus.png?raw=true "State Status")
+
+
+
+
+
+
+
 ###### Code:
 * construction: /src/construction.c
 * NFA structure: /src/data_structures/nfa.c
