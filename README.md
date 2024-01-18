@@ -1,10 +1,14 @@
 # Regex-Engine
 A C lang regex engine using NFA based on Ken Thompson`s paper
+It was introduced in his 1968 CACM paper.
+This implementation compiles Regular Expressions to Non-Deterministic Finite Automatas (NFA)
 
+Currently, this implementation only implements the repetition metacharacters ('+', '?', '*') and concatenation/alteration ("AND"/"OR")
 # <ins>This is a work in progress!!!
 # <ins>This is a work in progress!!!
 # <ins>This is a work in progress!!!
 # <ins>This is a work in progress!!!
+
 
 
 
