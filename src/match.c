@@ -3,19 +3,13 @@
 //
 
 #include "Include/nfa.h"
+#include "Include/match.h"
 #include <stdlib.h>
 
-typedef struct List
-{
-    NfaPtr *s;
-    int n;
-}List;
 
 List list1, list2;
 int listId;
-NFA matchstate = { 257 };
-#define SPLIT 257
-#define MATCH 256
+
 
 int ismatch(List *l)
 {
