@@ -2,7 +2,7 @@
 // Created by Yotam Levit on 24/09/2023.
 //
 
-#include "construction.h"
+#include "Include/construction.h"
 
 #include "Include/nfa.h"
 #include <stdlib.h>
@@ -10,14 +10,6 @@
 #define PUSH(stackp, s) *stackp++ = s
 #define POP()   *--stackp
 #define SPLIT 256
-
-NFA matchstate = { 256 };
-
-typedef struct Frag
-{
-    NfaPtr start;
-    NfaPtr* out;
-}Frag, * FragPtr;
 
 Frag* initFrag(NfaPtr start, NfaPtr** out){
     // Take memory for the new node
@@ -33,12 +25,6 @@ Frag* initFrag(NfaPtr start, NfaPtr** out){
     // Return the new node
     return newFrag;
 }
-
-typedef union StateList
-{
-    union StateList* next;
-    NfaPtr curr_state;
-} StateList;
 
 //List1 creates a new pointer list containing the single pointer outp.
 StateList* list1(NfaPtr* outp)
@@ -70,7 +56,7 @@ void patch(StateList* list, NfaPtr state){
     while(list)
     {
         next = list->next;
-        list->curr_state = state;
+        list->currState = state;
         list = next;
     }
 }
