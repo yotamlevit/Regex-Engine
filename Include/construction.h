@@ -63,7 +63,7 @@ void push(FragPtr stackp, FragPtr s);
  *      -> NFA fragments will keep merging, creating bigger NFA fragments, until the compilation process is over
  *      -> Then the last NFA fragment will be popped and patched to the matching state, and the NFA is completed.
  */
-NFA* post2nfa(char *postfix);
+NfaPtr post2nfa(char *postfix);
 
 
 #endif //REGEX_ENGINE_CONSTRUCTION_H
