@@ -73,8 +73,6 @@ char* insertExplicitConcatOperator(char* exp) {
     }
     *poutput = '\0';
 
-    //output = (char*) realloc(output, strlen(output)+1);
-
     return output;
 }
 
@@ -139,6 +137,6 @@ char* infixToPostfix(char * infix)
         ppost++;
     }
     *ppost = END_OF_STR;
-    printf("\nThe post infix is: %s\n", poststr);
+
     return poststr;
 }
