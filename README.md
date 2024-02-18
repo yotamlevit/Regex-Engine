@@ -18,7 +18,7 @@ Currently, this implementation only implements the repetition metacharacters ('+
 2. [Construction](#construction)
 3. [Match](#match)
 4. [Improvements](#improvements)
-5. [Refrences](#references)
+5. [References](#references)
 
 --------
 
