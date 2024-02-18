@@ -8,9 +8,6 @@
 #include "Include/nfa.h"
 #include <stdlib.h>
 
-//#define SPLIT 256
-
-
 typedef struct StateList
 {
     struct StateList* next;
