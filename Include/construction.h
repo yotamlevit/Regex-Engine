@@ -6,46 +6,11 @@
 #define REGEX_ENGINE_CONSTRUCTION_H
 
 
-//
-// Created by Yotam Levit on 24/09/2023.
-//
-
 #include "construction.h"
 
 #include "Include/nfa.h"
 #include <stdlib.h>
 
-#define PUSH(stackp, s) *stackp++ = s
-#define POP()   *--stackp
-#define SPLIT 256
-
-NFA matchstate = { 257 };
-
-typedef struct Frag
-{
-    NfaPtr start;
-    NfaPtr* out;
-}Frag, * FragPtr;
-
-Frag* initFrag(NfaPtr start, NfaPtr** out);
-
-typedef union StateList
-{
-    union StateList* next;
-    NfaPtr currState;
-} StateList;
-
-//List1 creates a new pointer list containing the single pointer outp.
-StateList* list1(NfaPtr* outp);
-
-
-// Append concatenates two pointer lists, returning the result.
-StateList* append(StateList* list1, StateList* list2);
-
-// Patch connects the dangling arrows in the pointer list l to the state s: it sets *outp = s for each pointer outp in l.
-void patch(StateList* list, NfaPtr state);
-
-void push(FragPtr stackp, FragPtr s);
 
 
 /*  Converts the postfix regular expression returned by re_infix2postfix into the equivalent NFA.
