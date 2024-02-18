@@ -17,6 +17,7 @@ Currently, this implementation only implements the repetition metacharacters ('+
 1. [Parse](#parse)
 2. [Construction](#construction)
 3. [Match](#match)
+4. [Improvements](#improvements)
 
 --------
 
@@ -80,3 +81,12 @@ Then using the nfa that represents the regex we can run our input string and ret
 
 
 ----------------
+
+### Improvements
+1. NFA representation as transition tables
+2. Caching the NFA to build a DFA
+
+
+### References
+* https://dl.acm.org/doi/10.1145/363347.363387
+* https://swtch.com/~rsc/regexp/regexp1.html
