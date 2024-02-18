@@ -35,6 +35,8 @@ typedef struct State
     int lastlist; // Lastlist is used during execution and is explained in the next section.
 }NFA,* NfaPtr;
 
+#define SPLIT 257
+#define MATCH 256
 
 // Function declaretion
 NfaPtr initNFA();
