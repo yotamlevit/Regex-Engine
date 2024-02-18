@@ -3,67 +3,74 @@
 //
 
 #include "Include/construction.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 #include "Include/nfa.h"
 #include <stdlib.h>
 
-#define PUSH(stackp, s) *stackp++ = s
-#define POP()   *--stackp
-#define SPLIT 256
+//#define SPLIT 256
 
-Frag* initFrag(NfaPtr start, NfaPtr** out){
+
+typedef struct StateList
+{
+    struct StateList* next;
+    NfaPtr currState;
+} StateList, * StateListPtr;
+
+
+StateListPtr initList(NfaPtr* outp){
+    StateListPtr newList = (StateListPtr)outp;
+    newList->next = NULL;
+
+    return newList;
+}
+
+typedef struct Frag
+{
+    NfaPtr start;
+    StateListPtr out;
+}Frag, * FragPtr;
+
+
+
+Frag* initFrag(NfaPtr start, StateListPtr out){
     // Take memory for the new node
     FragPtr newFrag = (FragPtr)malloc(sizeof(Frag));
 
     // Set the artibutes of the node
     newFrag->start = start;
-    newFrag->out = *out;
-
-    //for (int i = 0; i < sizeof(newFrag->out)/sizeof(NfaPtr);++i) {
-    //}
+    newFrag->out = out;
 
     // Return the new node
     return newFrag;
 }
 
-//List1 creates a new pointer list containing the single pointer outp.
-StateList* list1(NfaPtr* outp)
-{
-    StateList* stateList =  (StateList*)outp; //(ptr_list*)malloc(sizeof(NfaPtr*));
-    //*NfaListPtr = outp;
-    stateList->next = NULL;
 
-    return stateList;
+void printlist(StateListPtr l) {
+    printf("\nPrinting list\n");
+    for (StateListPtr pList = l;  pList != NULL ; pList = pList->next) {
+        printf("%c ", (l->currState->c));
+    }
+    printf("\n");
 }
-
 
 // Append concatenates two pointer lists, returning the result.
 StateList* append(StateList* list1, StateList* list2)
 {
     StateList* tmp = list1;
     // traverse till the linked list's end and set the end item's next to the second_list's start
-    while(list1->next)
-        list1 = list1->next;
-    list1->next = list2;
+    while(tmp->next)
+        tmp = tmp->next;
+    tmp->next = tmp;
 
-    return tmp;
+    return list1;
 }
 
 // Patch connects the dangling arrows in the pointer list l to the state s: it sets *outp = s for each pointer outp in l.
 void patch(StateList* list, NfaPtr state){
-    StateList* next;
-
-    while(list)
-    {
-        next = list->next;
+    for (; list != NULL; list = list->next) {
         list->currState = state;
-        list = next;
     }
-}
-
-void push(FragPtr stackp, FragPtr s)
-{
-    *stackp++ = *s;
 }
 
 
@@ -86,10 +93,14 @@ NfaPtr post2nfa(char *postfix)
 {
     char *p;
     Frag stack[1024], *stackp, e1, e2, e;
-    int stp = 0;
     NfaPtr s;
-
     stackp = stack;
+
+    #define PUSH(f) *stackp++ = f
+    #define POP()   *--stackp
+
+    printf(postfix);
+
     for(p=postfix; *p; p++){
         switch(*p){
             /* compilation cases, described below */
@@ -97,39 +108,47 @@ NfaPtr post2nfa(char *postfix)
                 e2 = POP();
                 e1 = POP();
                 patch(e1.out, e2.start);
-                push(stackp, initFrag(e1.start, e2.out));
+                PUSH(*initFrag(e1.start, e2.out));
                 break;
             case '|':
                 e2 = POP();
                 e1 = POP();
                 s = initNFAData(SPLIT, e1.start, e2.start, 0);
-                push(stackp, initFrag(s, append(e1.out, e2.out)));
+                PUSH(*initFrag(s, append(e1.out, e2.out)));
                 break;
             case '?':
                 e = POP();
                 s = initNFAData(SPLIT, e.start, NULL, 0);
-                push(stackp, initFrag(s, append(e.out, list1(&s->out1))));
+                PUSH(*initFrag(s, append(e.out, initList(&s->out1))));
                 break;
             case '*':
                 e = POP();
                 s = initNFAData(SPLIT, e.start, NULL, 0);
                 patch(e.out, s);
-                push(stackp,initFrag(s, list1(&s->out1)));
+                PUSH(*initFrag(s, initList(&s->out1)));
                 break;
             case '+':
                 e = POP();
                 s = initNFAData(SPLIT, e.start, NULL, 0);
                 patch(e.out, s);
-                push(stackp ,initFrag(e.start, list1(&s->out1)));
+                PUSH(*initFrag(e.start, initList(&s->out1)));
                 break;
             default:
                 s = initNFAData(*p, NULL, NULL,0);
-                push(stackp, initFrag(s, list1(&s->out)));
+                PUSH(*initFrag(s, initList(&s->out)));
                 break;
         }
     }
 
     e = POP();
-    patch(e.out, &matchstate);
+
+    if (stackp != stack)
+        return NULL;
+
+    NfaPtr matchstate = initNFA();
+    matchstate->c = MATCH;
+
+    patch(e.out, matchstate);
+
     return e.start;
 }
