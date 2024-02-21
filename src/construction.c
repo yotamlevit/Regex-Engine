@@ -42,15 +42,6 @@ Frag* initFrag(NfaPtr start, StateListPtr out){
     return newFrag;
 }
 
-
-void printlist(StateListPtr l) {
-    printf("\nPrinting list\n");
-    for (StateListPtr pList = l;  pList != NULL ; pList = pList->next) {
-        printf("%c ", (l->currState->c));
-    }
-    printf("\n");
-}
-
 // Append concatenates two pointer lists, returning the result.
 StateList* append(StateList* list1, StateList* list2)
 {
