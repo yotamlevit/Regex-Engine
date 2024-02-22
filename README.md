@@ -65,11 +65,42 @@ State can represent three types of NFA fragments, depending on c values:
 
 ![State Types Photo](relative%20path/../Images/StateStatus.png?raw=true "State Status")
 
+###### Construction process:
 
+The compiler scans the postfix expression, it maintains a stack of computed NFA fragments.
 
+Literals push new NFA fragments onto the stack, while operators pop fragments off the stack and then push a new fragment.
 
+For example, after compiling the abb in abb.+.a., the stack contains NFA fragments for a, b, and b. The compilation of the . that follows pops the two b NFA fragment from the stack and pushes an NFA fragment for the concatenation bb..
 
+Each NFA fragment is defined by its start state and its outgoing arrows:
+```angular2html
+typedef struct Frag
+{
+NfaPtr start;     // start NFA state
+StateListPtr out; // out is a list of pointers to State* pointers that are not yet connected to anything
+                  // Actually the list is a list of out & out1 from the State structure
+}Frag, * FragPtr;
+```
 
+The compilation options for regex are:
+* Literals - Pushes a new fragment to the stack
+
+    ![literals.png](Images/compiler/literals.png)
+
+* Operators:
+  * '.' - The concat, connecting 2 states
+    ![concatOperator.png](Images/compiler/concatOperator.png)
+  * '|' (Alternation) - Connecting 2 states with a "parent" split state
+    ![alternationOperator.png](Images/compiler/alternationOperator.png)
+  * '?' (zero or one) - Connecting a state with a "parent"  split state and the second state is an epsilon (no character needed)
+    ![zeroOrOneOperator.png](Images/compiler/zeroOrOneOperator.png)
+  * '*' (zero or more) - Same as '?' (zero or more) but q1 connects to the 'parent' so the state can repeat itself (there can be another character)
+    ![zeroOrMoreOperator.png](Images/compiler/zeroOrMoreOperator.png)
+  * '+' (one or more) - Creates a "child" split state between its "parent" state (the state before) and the next state. Meaning a split between an epsilon to the state before and an option for the next character.
+    ![oneOrMoreOperator.png](Images/compiler/oneOrMoreOperator.png)
+
+An easy to understand visual explanation can be found here: https://medium.com/swlh/visualizing-thompsons-construction-algorithm-for-nfas-step-by-step-f92ef378581b
 
 ###### Code:
 * construction: /src/construction.c
