@@ -7,6 +7,21 @@
 #include <stdlib.h>
 
 
+typedef struct List
+{
+    NfaPtr *s;
+    int n;
+}List;
+
+int ismatch(List *l);
+
+void addstate(List *l, NfaPtr s);
+
+List* startlist(NfaPtr s, List *l);
+
+void step(List *currentList, int c, List *nextList);
+
+
 List list1, list2;
 int listId;
 
@@ -57,10 +72,17 @@ void step(List *currentList, int c, List *nextList)
     }
 }
 
+void re_init()
+{
+    list1.s = malloc(10 * sizeof(NfaPtr));
+    list2.s = malloc(10 * sizeof(NfaPtr));
 
-int match(NfaPtr start, char *s)
+}
+
+int match(NfaPtr start, char q*s)
 {
     List *currentList, *nextList, *t;
+    re_init();
 
     /* l1 and l2 are preallocated globals */
     currentList = startlist(start, &list1);
