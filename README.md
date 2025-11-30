@@ -3,7 +3,8 @@
 A C language regex engine using NFA based on Ken Thompson's 1968 CACM paper.  
 This implementation compiles Regular Expressions to Non-Deterministic Finite Automata (NFA) using Thompson's Construction algorithm.
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![CI](https://github.com/yotamlevit/Regex-Engine/workflows/CI/badge.svg)](https://github.com/yotamlevit/Regex-Engine/actions/workflows/ci.yml)
+[![CD](https://github.com/yotamlevit/Regex-Engine/workflows/CD/badge.svg)](https://github.com/yotamlevit/Regex-Engine/actions/workflows/cd.yml)
 [![Tests](https://img.shields.io/badge/tests-61%2F61%20passing-success)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -195,7 +196,82 @@ Run tests:
 make test
 ```
 
-**Result: 61/61 PASSING** ✅
+**Current Status:** 61/61 PASSING ✅
+
+## 📦 Using as a Library
+
+The regex engine can be built as a static library (`libregex.a`) for use in your C projects.
+
+### Building the Library
+
+```bash
+make lib
+```
+
+This creates `libregex.a` containing all the core regex functions.
+
+### Using in Your Project
+
+**1. Include headers in your code:**
+
+```c
+#include "regex_engine/parse.h"
+#include "regex_engine/construction.h"
+#include "regex_engine/match.h"
+#include "regex_engine/nfa.h"
+```
+
+**2. Compile and link:**
+
+```bash
+gcc yourcode.c -L/path/to/regex -lregex -I/path/to/regex/Include -o yourprogram
+```
+
+**3. Example code:**
+
+```c
+#include "regex_engine/parse.h"
+#include "regex_engine/construction.h"
+#include "regex_engine/match.h"
+
+int main() {
+    char *pattern = "hello";
+    char *text = "hello";
+
+    char *concat = insertExplicitConcatOperator(pattern);
+    char *postfix = infixToPostfix(concat);
+    NfaPtr nfa = post2nfa(postfix);
+
+    int result = match(nfa, text);
+    printf("Match: %s\n", result ? "YES" : "NO");
+
+    free(concat);
+    free(postfix);
+    return 0;
+}
+```
+
+### Installation (Optional)
+
+Install system-wide (requires sudo):
+
+```bash
+sudo make install          # Install to /usr/local
+```
+
+Or specify custom prefix:
+
+```bash
+make install PREFIX=$HOME/.local
+```
+
+Uninstall:
+
+```bash
+sudo make uninstall
+```
+
+---
 
 ## 📚 Documentation
 

@@ -1,0 +1,48 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    name: Build and Release Library (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build static library
+        run: make clean && make lib
+
+      - name: Verify build
+        run: |
+          ls -lh libregex.a
+          file libregex.a
+
+      - name: Run tests
+        run: make && make test
+
+      - name: Upload library artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: libregex-${{ matrix.os }}
+          path: libregex.a
+          retention-days: 90
+
+      - name: Create release info
+        run: |
+          echo "Built on: $(date)" > release-info.txt
+          echo "OS: ${{ matrix.os }}" >> release-info.txt
+          echo "Library size: $(ls -lh libregex.a | awk '{print $5}')" >> release-info.txt
+
+      - name: Upload release info
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-info-${{ matrix.os }}
+          path: release-info.txt
