@@ -63,5 +63,8 @@ cmake-build-debug
 .vscode
 .vs
 
-# Temp Dev Files
-Tmp
+# Build artifacts and binaries
+*.o
+regex_engine
+regex
+debug_regex
