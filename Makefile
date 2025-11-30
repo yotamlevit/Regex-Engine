@@ -12,25 +12,24 @@ LIB_SRCS = src/parse.c \
            src/common/data_structures/stack_char.c
 
 # Test suite source
-TEST_SRCS = src/main.c $(LIB_SRCS)
+TEST_SRCS = tests/test_suite.c $(LIB_SRCS)
 
 # CLI source
-CLI_SRCS = src/regex_cli.c $(LIB_SRCS)
+CLI_SRCS = tests/regex_cli.c $(LIB_SRCS)
 
 # Object files
-TEST_OBJS = $(TEST_SRCS:.c=.o)
 LIB_OBJS = $(LIB_SRCS:.c=.o)
 
 # Default target - build both
 all: $(TARGET) $(CLI_TARGET)
 
 # Link the test suite executable
-$(TARGET): src/main.o $(LIB_OBJS)
+$(TARGET): tests/test_suite.o $(LIB_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 	@echo "Test suite built: ./$(TARGET)"
 
 # Link the CLI executable
-$(CLI_TARGET): src/regex_cli.o $(LIB_OBJS)
+$(CLI_TARGET): tests/regex_cli.o $(LIB_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 	@echo "CLI tool built: ./$(CLI_TARGET)"
 
@@ -40,7 +39,7 @@ $(CLI_TARGET): src/regex_cli.o $(LIB_OBJS)
 
 # Clean build artifacts
 clean:
-	rm -f src/*.o src/common/data_structures/*.o $(TARGET) $(CLI_TARGET)
+	rm -f src/*.o src/common/data_structures/*.o tests/*.o $(TARGET) $(CLI_TARGET)
 	@echo "Clean complete"
 
 # Run the test suite
