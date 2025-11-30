@@ -88,8 +88,6 @@ NfaPtr post2nfa(char *postfix) {
 #define PUSH(f) *stackp++ = f
 #define POP() *--stackp
 
-  printf(postfix);
-
   for (p = postfix; *p; p++) {
     switch (*p) {
     /* compilation cases, described below */
