@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [feature/**, develop]
+
+jobs:
+  test:
+    name: Build and Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build project
+        run: make clean && make
+
+      - name: Run tests
+        run: make test
+
+      - name: Build static library
+        run: make lib
+
+      - name: Verify library was created
+        run: |
+          if [ -f libregex.a ]; then
+            echo "✓ Library libregex.a created successfully"
+            ls -lh libregex.a
+            file libregex.a
+          else
+            echo "✗ Library libregex.a not found"
+            exit 1
+          fi
+
+      - name: Test CLI tool
+        run: |
+          ./regex 'hello' 'hello' || exit 1
+          ./regex '(a|b)*' 'ababab' || exit 1
+          echo "✓ CLI tests passed"

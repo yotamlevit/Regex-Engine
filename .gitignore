@@ -68,3 +68,5 @@ cmake-build-debug
 regex_engine
 regex
 debug_regex
+libregex.a
+*.a
